@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import edu.jnu.banner.Entity.BannerBean;
 import edu.jnu.banner.adapter.BannerAdapter;
 import edu.jnu.banner.widget.LoopImagePoint;
+import edu.jnu.banner.widget.TimerHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llPoint;
     //自动循环显示时间
     private int INTERVAL_TIME = 3000;
-    private Timer mTimer = new Timer();
+    private TimerHelper timerHelper;
 
     //横幅下面的点
     private List<LoopImagePoint> loopImagePoints;
@@ -48,12 +49,47 @@ public class MainActivity extends AppCompatActivity {
 
         bannerBeans = new ArrayList<>();
         loopImagePoints = new ArrayList<>();
+
         initData();
         showBanner();
+
+        timerHelper = new TimerHelper() {
+            @Override
+            public void run() {
+                if (!isUserTouched) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (bannerAdapter != null) {
+                                int count = bannerAdapter.getCount();
+                                if (count > 2) {
+                                    int index = vpLoopBanner.getCurrentItem();
+                                    index = index % (count - 2) + 1;
+                                    vpLoopBanner.setCurrentItem(index);
+                                    Log.d("index", index + "");
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        timerHelper.start(INTERVAL_TIME,INTERVAL_TIME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timerHelper.stop();
     }
 
     private void initData() {
-        for(String image:Constant.images) {
+        for (String image : Constant.images) {
             BannerBean bannerBean = new BannerBean();
             bannerBean.setImage(image);
             bannerBean.setTitle("Title");
@@ -93,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             bannerAdapter.notifyDataSetChanged();
         }
-        mTimer.schedule(mTimerTask, INTERVAL_TIME, INTERVAL_TIME);
     }
 
     /**
@@ -114,20 +149,7 @@ public class MainActivity extends AppCompatActivity {
     private TimerTask mTimerTask = new TimerTask() {
         @Override
         public void run() {
-            if (!isUserTouched) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        int count = bannerAdapter.getCount();
-                        if (count > 2) {
-                            int index = vpLoopBanner.getCurrentItem();
-                            index = index % (count - 2) + 1;
-                            vpLoopBanner.setCurrentItem(index);
-                            Log.d("index",index+"");
-                        }
-                    }
-                });
-            }
+
         }
     };
 }
