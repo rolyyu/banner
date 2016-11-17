@@ -10,7 +10,7 @@ import edu.jnu.banner.util.ScreenUtil;
 
 /**
  * Created by roly on 2016/10/14.
- *
+ * 自定义指示器，可以设置长、宽和间距
  */
 public class LoopImagePoint {
     private Context context;
@@ -22,9 +22,11 @@ public class LoopImagePoint {
         point.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.ic_point_normal));
         parent.addView(point);
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) point.getLayoutParams();
+        //设置长宽和间距
         params.width = ScreenUtil.dipToPx(context, 30);
         params.height = ScreenUtil.dipToPx(context, 3);
         if (!isFirst) {
+            //设置间距
             params.leftMargin = ScreenUtil.dipToPx(context, 3);
         }
         point.setLayoutParams(params);

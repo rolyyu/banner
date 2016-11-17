@@ -97,12 +97,17 @@ public class BannerAdapter extends PagerAdapter implements ViewPager.OnPageChang
 
     }
 
+
     private OnIndicatorChangeListener onIndicatorChangeListener;
 
     public interface OnIndicatorChangeListener {
         void OnIndicatorChange(int position);
     }
 
+    /**
+     * 指示器改变
+     * @param onIndicatorChangeListener
+     */
     public void setOnIndicatorChangeListener(OnIndicatorChangeListener onIndicatorChangeListener) {
         this.onIndicatorChangeListener = onIndicatorChangeListener;
     }

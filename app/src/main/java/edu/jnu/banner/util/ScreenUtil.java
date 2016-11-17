@@ -7,16 +7,6 @@ import android.view.Display;
 
 public class ScreenUtil {
 
-    public static class Data {
-        public int px;
-        public float dp;
-
-        public Data(int px, float density) {
-            this.px = px;
-            this.dp = px / density;
-        }
-    }
-
     /**
      * 获取屏幕
      */
@@ -35,6 +25,15 @@ public class ScreenUtil {
         return (int) (pxValue / scale + 0.5f);
     }
 
+    public static class Data {
+        public int px;
+        public float dp;
+
+        public Data(int px, float density) {
+            this.px = px;
+            this.dp = px / density;
+        }
+    }
     /**
      * 屏幕宽度
      */
@@ -52,4 +51,5 @@ public class ScreenUtil {
         getDisplay(context).getMetrics(dm);
         return new Data(dm.heightPixels, dm.density);
     }
+
 }
