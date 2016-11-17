@@ -80,9 +80,6 @@ public class Banner extends RelativeLayout {
         bannerBeans = new ArrayList<>();
         loopImagePoints = new ArrayList<>();
 
-        initData();
-        showBanner();
-
         timerHelper = new TimerHelper() {
             @Override
             public void run() {
@@ -137,13 +134,9 @@ public class Banner extends RelativeLayout {
         return super.dispatchTouchEvent(ev);
     }
 
-    private void initData() {
-        for (String image : Constant.images) {
-            BannerBean bannerBean = new BannerBean();
-            bannerBean.setImage(image);
-            bannerBean.setTitle("Title");
-            bannerBeans.add(bannerBean);
-        }
+    public void setData(List<BannerBean> bannerBeans){
+        this.bannerBeans = bannerBeans;
+        showBanner();
     }
 
     private void showBanner() {

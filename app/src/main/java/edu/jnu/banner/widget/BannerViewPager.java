@@ -10,6 +10,7 @@ import android.view.MotionEvent;
  *
  */
 public class BannerViewPager extends ViewPager {
+    //是否可滑动
     private boolean scrollable = true;
 
     public BannerViewPager(Context context) {

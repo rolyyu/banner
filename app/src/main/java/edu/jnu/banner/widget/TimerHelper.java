@@ -13,7 +13,6 @@ public abstract class TimerHelper {
     private Timer timer = null;
 
     public void start(long delay,long period){
-
         stop();
         timer = new Timer();
         timer.schedule(new TimerTask() {
