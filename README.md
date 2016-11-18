@@ -23,9 +23,9 @@
 	/**
      * 设置资源文件、数据大小、适配器
      *
-     * @param layoutResId  //设置自定义布局文件，不包含指示器
-     * @param dataSize //数据大小
-     * @param adapter //填充数据
+     * @param layoutResId  设置自定义布局文件，不包含指示器
+     * @param dataSize 数据大小
+     * @param adapter 填充数据
      */
     public void setAdapter(@LayoutRes int layoutResId, int dataSize, Adapter adapter); 
 ```
@@ -51,6 +51,23 @@ e.g.：
 </RelativeLayout>
 ```
 
+实体类：
+
+```java
+public class BannerBean {
+
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+}
+```
+
 设置适配器：
 
 ```java
@@ -59,7 +76,7 @@ banner.setAdapter(R.layout.item_banner, bannerBeans.size(), new Banner.Adapter()
     public void fillBannerItem(View view, final int position) {
     	//填充数据
         ImageView imageView = (ImageView) view.findViewById(R.id.img_banner);
-        ImageUtil.load(MainActivity.this, imageView, bannerBean.getImage());
+        ImageUtil.load(MainActivity.this, imageView, bannerBeans.get(position).getImage());
                
         //设置单击事件
         view.setOnClickListener(new View.OnClickListener() {
