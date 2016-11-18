@@ -39,6 +39,7 @@ public class Banner extends RelativeLayout {
     private LinearLayout llPoint;
     private List<LoopImagePoint> loopImagePoints;
 
+    private boolean isAutoPlay = true;
     //自动循环显示时间
     private long TIME_PERIOD = 3000;
     private TimerHelper timerHelper;
@@ -117,6 +118,10 @@ public class Banner extends RelativeLayout {
         TIME_PERIOD = period;
     }
 
+    public void setIsAutoPlay(boolean isAutoPlay) {
+        this.isAutoPlay = isAutoPlay;
+    }
+
     /**
      * 自动播放开、关
      *
@@ -125,10 +130,12 @@ public class Banner extends RelativeLayout {
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-        if (visibility == VISIBLE)
-            timerHelper.start(TIME_PERIOD, TIME_PERIOD);
-        else
-            timerHelper.stop();
+        if (isAutoPlay) {
+            if (visibility == VISIBLE)
+                timerHelper.start(TIME_PERIOD, TIME_PERIOD);
+            else
+                timerHelper.stop();
+        }
     }
 
     /**
@@ -169,6 +176,7 @@ public class Banner extends RelativeLayout {
 
     /**
      * 设置资源文件、数据大小、适配器
+     *
      * @param layoutResId
      * @param dataSize
      * @param adapter

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +32,23 @@ public class MainActivity extends AppCompatActivity {
 
         banner.setAdapter(R.layout.item_banner, bannerBeans.size(), new Banner.Adapter() {
             @Override
-            public void fillBannerItem(View view, int position) {
+            public void fillBannerItem(View view, final int position) {
                 ImageView imageView = (ImageView) view.findViewById(R.id.img_banner);
                 TextView textView = (TextView) view.findViewById(R.id.text_banner_title);
                 final BannerBean bannerBean = bannerBeans.get(position);
                 if (!bannerBean.getImage().equals(""))
                     ImageUtil.load(MainActivity.this, imageView, bannerBean.getImage());
                 textView.setText(bannerBean.getTitle());
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this,"item"+position+"click",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+        banner.setIsAutoPlay(false);
     }
 
     private void initData() {
