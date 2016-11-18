@@ -6,7 +6,7 @@
 
 循环广告栏
 
-## 基本使用
+## 使用
 
 ### 1.在布局文件中添加Banner
 
@@ -44,7 +44,7 @@ banner.setAdapter(R.layout.item_banner, bannerBeans.size(), new Banner.Adapter()
         view.setOnClickListener(new View.OnClickListener() {
         	@Override
             public void onClick(View v) {
-                    	           Toast.makeText(MainActivity.this,"item"+position+"click",Toast.LENGTH_SHORT).show();
+                   Toast.makeText(MainActivity.this,"item"+position+"click",Toast.LENGTH_SHORT).show();
             }
         });
      }
