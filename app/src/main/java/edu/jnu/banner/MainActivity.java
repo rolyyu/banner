@@ -2,12 +2,16 @@ package edu.jnu.banner;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import edu.jnu.banner.Entity.BannerBean;
+import edu.jnu.banner.util.ImageUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,8 +29,19 @@ public class MainActivity extends AppCompatActivity {
 
         banner = (Banner) findViewById(R.id.banner);
 
-        banner.setData(bannerBeans);
+        banner.setAdapter(R.layout.item_banner, bannerBeans.size(), new Banner.Adapter() {
+            @Override
+            public void fillBannerItem(View view, int position) {
+                ImageView imageView = (ImageView) view.findViewById(R.id.img_banner);
+                TextView textView = (TextView) view.findViewById(R.id.text_banner_title);
+                final BannerBean bannerBean = bannerBeans.get(position);
+                if (!bannerBean.getImage().equals(""))
+                    ImageUtil.load(MainActivity.this, imageView, bannerBean.getImage());
+                textView.setText(bannerBean.getTitle());
+            }
+        });
     }
+
     private void initData() {
         for (String image : Constant.images) {
             BannerBean bannerBean = new BannerBean();
