@@ -32,6 +32,27 @@
 
 e.g.：
 
+自定义布局**R.layout.item_banner**：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_banner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img_banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>
+```
+
+设置适配器：
+
 ```java
 banner.setAdapter(R.layout.item_banner, bannerBeans.size(), new Banner.Adapter() {
 	@Override
