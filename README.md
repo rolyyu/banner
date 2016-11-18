@@ -2,7 +2,7 @@
 
  ![screenshot](screenshot.gif)
 
- ## 功能
+## 功能
 
 循环广告栏
 
