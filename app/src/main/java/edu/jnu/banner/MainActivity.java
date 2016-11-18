@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-        banner.setIsAutoPlay(false);
+
     }
 
     private void initData() {

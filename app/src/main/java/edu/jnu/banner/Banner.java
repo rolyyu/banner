@@ -18,6 +18,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.IllegalBlockSizeException;
+
 import edu.jnu.banner.Entity.BannerBean;
 import edu.jnu.banner.util.ImageUtil;
 import edu.jnu.banner.util.ScreenUtil;
@@ -175,28 +177,35 @@ public class Banner extends RelativeLayout {
     }
 
     /**
-     * 设置资源文件、数据大小、适配器
+     * 设置自定义布局、数据大小、适配器
      *
-     * @param layoutResId
-     * @param dataSize
-     * @param adapter
+     * @param layoutResId 自定义布局
+     * @param dataSize 数据大小
+     * @param adapter 适配器
      */
     public void setAdapter(@LayoutRes int layoutResId, int dataSize, Adapter adapter) {
         this.layoutResId = layoutResId;
         this.dataSize = dataSize;
         this.adapter = adapter;
-        bannerAdapter = new BannerAdapter();
-        showBanner();
+        if (dataSize > 0 || dataSize > 200) {
+            bannerAdapter = new BannerAdapter();
+            showBanner();
+        }
     }
 
     private void showBanner() {
-        for (int i = 0; i < dataSize; i++) {
-            loopImagePoints.add(new LoopImagePoint(context, llPoint, i == 0));
+        if (dataSize == 1) {
+            vpBanner.setScrollable(false);
+            setIsAutoPlay(false);
+        } else {
+            for (int i = 0; i < dataSize; i++) {
+                loopImagePoints.add(new LoopImagePoint(context, llPoint, i == 0));
+            }
+            changeLoopPoint(nowSelect);
+            vpBanner.setCurrentItem(nowSelect);
+            vpBanner.addOnPageChangeListener(bannerAdapter);
         }
-        changeLoopPoint(nowSelect);
         vpBanner.setAdapter(bannerAdapter);
-        vpBanner.setCurrentItem(nowSelect);
-        vpBanner.addOnPageChangeListener(bannerAdapter);
     }
 
     private class BannerAdapter extends PagerAdapter implements ViewPager.OnPageChangeListener {
