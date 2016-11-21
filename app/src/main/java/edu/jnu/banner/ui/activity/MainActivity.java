@@ -1,5 +1,7 @@
-package edu.jnu.banner;
+package edu.jnu.banner.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,13 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import edu.jnu.banner.Banner;
+import edu.jnu.banner.Constant;
 import edu.jnu.banner.Entity.BannerBean;
+import edu.jnu.banner.R;
 import edu.jnu.banner.util.ImageUtil;
 
 public class MainActivity extends AppCompatActivity {
 
     private List<BannerBean> bannerBeans;
     private Banner banner;
+
+    public static void launch(Context context){
+        Intent starter = new Intent(context,MainActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         banner = (Banner) findViewById(R.id.banner);
 
-        banner.setAdapter(R.layout.item_banner, bannerBeans.size(), new Banner.Adapter() {
+        banner.setAdapter(R.layout.item_banner,true , bannerBeans.size(), new Banner.Adapter() {
             @Override
             public void fillBannerItem(View view, final int position) {
                 ImageView imageView = (ImageView) view.findViewById(R.id.img_banner);
@@ -48,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        banner.setIsAutoPlay(true);
 
     }
 

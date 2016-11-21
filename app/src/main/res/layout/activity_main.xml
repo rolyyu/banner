@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.jnu.banner.MainActivity">
+    tools:context="edu.jnu.banner.ui.activity.MainActivity">
 
     <edu.jnu.banner.Banner
         android:id="@+id/banner"

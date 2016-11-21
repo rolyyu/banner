@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Banner</string>
+    <string name="btn_enter">点击进入</string>
 </resources>

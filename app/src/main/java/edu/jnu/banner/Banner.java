@@ -41,7 +41,7 @@ public class Banner extends RelativeLayout {
     private LinearLayout llPoint;
     private List<LoopImagePoint> loopImagePoints;
 
-    private boolean isAutoPlay = true;
+    private boolean isAutoPlay = false;
     //自动循环显示时间
     private long TIME_PERIOD = 3000;
     private TimerHelper timerHelper;
@@ -51,10 +51,12 @@ public class Banner extends RelativeLayout {
     private int nowSelect = 0;
     private boolean isUserTouched = false;
 
-    private Adapter adapter;
     private int layoutResId;
+    private boolean isCyclePlay;
     private int dataSize;
+    private Adapter adapter;
 
+    private ViewPager.OnPageChangeListener onPageChangeListener;
 
     public Banner(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -180,16 +182,20 @@ public class Banner extends RelativeLayout {
      * 设置自定义布局、数据大小、适配器
      *
      * @param layoutResId 自定义布局
-     * @param dataSize 数据大小
-     * @param adapter 适配器
+     * @param isCyclePlay 是否循环播放
+     * @param dataSize    数据大小
+     * @param adapter     适配器
      */
-    public void setAdapter(@LayoutRes int layoutResId, int dataSize, Adapter adapter) {
+    public void setAdapter(@LayoutRes int layoutResId, boolean isCyclePlay, int dataSize, Adapter adapter) {
         this.layoutResId = layoutResId;
+        this.isCyclePlay = isCyclePlay;
         this.dataSize = dataSize;
         this.adapter = adapter;
-        if (dataSize > 0 || dataSize > 200) {
+        if (dataSize > 0 && dataSize < 200) {
             bannerAdapter = new BannerAdapter();
             showBanner();
+        } else {
+            throw new IllegalArgumentException("dataSize out of range");
         }
     }
 
@@ -229,19 +235,21 @@ public class Banner extends RelativeLayout {
 
         @Override
         public void finishUpdate(ViewGroup container) {
-            int position = vpBanner.getCurrentItem();
-            if (position == 0) {
-                position = DEFAULT_BANNER_SIZE;
-                vpBanner.setCurrentItem(position, false);
-            } else if (position == FAKE_BANNER_SIZE - 1) {
-                position = DEFAULT_BANNER_SIZE - 1;
-                vpBanner.setCurrentItem(position, false);
+            if (isCyclePlay) {
+                int position = vpBanner.getCurrentItem();
+                if (position == 0) {
+                    position = DEFAULT_BANNER_SIZE;
+                    vpBanner.setCurrentItem(position, false);
+                } else if (position == FAKE_BANNER_SIZE - 1) {
+                    position = DEFAULT_BANNER_SIZE - 1;
+                    vpBanner.setCurrentItem(position, false);
+                }
             }
         }
 
         @Override
         public int getCount() {
-            return FAKE_BANNER_SIZE;
+            return isCyclePlay ? FAKE_BANNER_SIZE : DEFAULT_BANNER_SIZE;
         }
 
         @Override
@@ -253,16 +261,31 @@ public class Banner extends RelativeLayout {
         public void onPageSelected(int position) {
             position %= DEFAULT_BANNER_SIZE;
             changeLoopPoint(position);
+            if (onPageChangeListener != null){
+                onPageChangeListener.onPageSelected(position);
+            }
         }
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            if (onPageChangeListener != null) {
+                onPageChangeListener.onPageScrolled(position % DEFAULT_BANNER_SIZE, positionOffset, positionOffsetPixels);
+            }
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
+            if (onPageChangeListener != null) {
+                onPageChangeListener.onPageScrollStateChanged(state);
+            }
         }
+    }
+    /**
+     * 添加ViewPager滚动监听器
+     *
+     * @param onPageChangeListener 滚动监听
+     */
+    public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
+        this.onPageChangeListener = onPageChangeListener;
     }
 }
