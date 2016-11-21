@@ -12,22 +12,23 @@
 
 ```xml
 <edu.jnu.banner.Banner
-        android:id="@+id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
+    android:id="@+id/banner"
+    android:layout_width="match_parent"
+    android:layout_height="200dp" />
 ```
 
 ### 2.初始化
 
 ```java
-	/**
-     * 设置资源文件、数据大小、适配器
-     *
-     * @param layoutResId  设置自定义布局文件，不包含指示器
-     * @param dataSize 数据大小
-     * @param adapter 填充数据
-     */
-    public void setAdapter(@LayoutRes int layoutResId, int dataSize, Adapter adapter); 
+/**
+ * 设置自定义布局、数据大小、适配器
+ *
+ * @param layoutResId 自定义布局
+ * @param isCyclePlay 是否循环播放
+ * @param dataSize    数据大小
+ * @param adapter     适配器
+ */
+public void setAdapter(@LayoutRes int layoutResId, boolean isCyclePlay, int dataSize, Adapter adapter)
 ```
 
 e.g.：
