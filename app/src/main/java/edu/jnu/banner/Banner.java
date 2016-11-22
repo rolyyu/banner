@@ -10,21 +10,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.IllegalBlockSizeException;
-
-import edu.jnu.banner.Entity.BannerBean;
-import edu.jnu.banner.util.ImageUtil;
 import edu.jnu.banner.util.ScreenUtil;
 import edu.jnu.banner.widget.BannerViewPager;
-import edu.jnu.banner.widget.LoopImagePoint;
+import edu.jnu.banner.widget.Indicator;
 import edu.jnu.banner.widget.TimerHelper;
 
 /**
@@ -39,7 +33,7 @@ public class Banner extends RelativeLayout {
 
     //指示器
     private LinearLayout llPoint;
-    private List<LoopImagePoint> loopImagePoints;
+    private List<Indicator> indicators;
 
     private boolean isAutoPlay = false;
     //自动循环显示时间
@@ -87,7 +81,7 @@ public class Banner extends RelativeLayout {
         rlParams.bottomMargin = ScreenUtil.dipToPx(context, 16);
         addView(llPoint, rlParams);
 
-        loopImagePoints = new ArrayList<>();
+        indicators = new ArrayList<>();
 
         timerHelper = new TimerHelper() {
             @Override
@@ -163,14 +157,14 @@ public class Banner extends RelativeLayout {
     /**
      * 修改指示器
      */
-    private void changeLoopPoint(int position) {
+    private void changeIndicator(int position) {
         preSelect = nowSelect;
         nowSelect = position;
         if (preSelect != -1) {
-            loopImagePoints.get(preSelect).setFocus(false);
+            indicators.get(preSelect).setFocus(false);
         }
         if (nowSelect != -1) {
-            loopImagePoints.get(nowSelect).setFocus(true);
+            indicators.get(nowSelect).setFocus(true);
         }
     }
 
@@ -205,9 +199,9 @@ public class Banner extends RelativeLayout {
             setIsAutoPlay(false);
         } else {
             for (int i = 0; i < dataSize; i++) {
-                loopImagePoints.add(new LoopImagePoint(context, llPoint, i == 0));
+                indicators.add(new Indicator(context, llPoint, i == 0));
             }
-            changeLoopPoint(nowSelect);
+            changeIndicator(nowSelect);
             vpBanner.setCurrentItem(nowSelect);
             vpBanner.addOnPageChangeListener(bannerAdapter);
         }
@@ -260,7 +254,7 @@ public class Banner extends RelativeLayout {
         @Override
         public void onPageSelected(int position) {
             position %= DEFAULT_BANNER_SIZE;
-            changeLoopPoint(position);
+            changeIndicator(position);
             if (onPageChangeListener != null){
                 onPageChangeListener.onPageSelected(position);
             }

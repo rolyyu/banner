@@ -11,5 +11,10 @@ public class Constant {
             "http://img04.tooopen.com/images/20130627/tooopen_11102476.jpg",
             "http://img03.tooopen.com/images/20130618/tooopen_14435192.jpg",
     };
-
+    public static final int[] guide = {
+            R.drawable.ic_guide1,
+            R.drawable.ic_guide2,
+            R.drawable.ic_guide3,
+            R.drawable.ic_guide4,
+    };
 }

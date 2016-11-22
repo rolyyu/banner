@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.jnu.banner.Banner;
 import edu.jnu.banner.Constant;
@@ -21,8 +22,10 @@ import edu.jnu.banner.util.ImageUtil;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.banner)
+    Banner banner;
+
     private List<BannerBean> bannerBeans;
-    private Banner banner;
 
     public static void launch(Context context){
         Intent starter = new Intent(context,MainActivity.class);
@@ -37,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         bannerBeans = new ArrayList<>();
         initData();
-
-        banner = (Banner) findViewById(R.id.banner);
 
         banner.setAdapter(R.layout.item_banner,true , bannerBeans.size(), new Banner.Adapter() {
             @Override
