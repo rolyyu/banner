@@ -1,6 +1,6 @@
 # banner
 
- ![screenshot](screenshot.gif)
+ ![screenshot](screenshot1.gif)  ![screenshot](screenshot2.gif)
 
 ## 功能
 
