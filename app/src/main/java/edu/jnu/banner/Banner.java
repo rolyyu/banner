@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.jnu.banner.transformer.PageTransformer;
+import edu.jnu.banner.transformer.TransitionEffect;
 import edu.jnu.banner.util.ScreenUtil;
 import edu.jnu.banner.widget.BannerViewPager;
 import edu.jnu.banner.widget.Indicator;
@@ -27,6 +29,9 @@ import edu.jnu.banner.widget.TimerHelper;
  */
 public class Banner extends RelativeLayout {
 
+    //banner适配器大小的倍数
+    private final int MULTIPLES = 10;
+
     private Context context;
     private BannerViewPager vpBanner;
     private BannerAdapter bannerAdapter;
@@ -37,7 +42,7 @@ public class Banner extends RelativeLayout {
 
     private boolean isAutoPlay = false;
     //自动循环显示时间
-    private long TIME_PERIOD = 3000;
+    private long TIME_PERIOD = 5000;
     private TimerHelper timerHelper;
     //之前显示的图片
     private int preSelect = -1;
@@ -60,6 +65,12 @@ public class Banner extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         this.context = context;
         initView();
+    }
+
+    public void setPageTransformer(TransitionEffect effect) {
+        if (vpBanner != null) {
+            vpBanner.setPageTransformer(true, PageTransformer.getPageTransformer(effect));
+        }
     }
 
     private void initView() {
@@ -185,7 +196,7 @@ public class Banner extends RelativeLayout {
         this.isCyclePlay = isCyclePlay;
         this.dataSize = dataSize;
         this.adapter = adapter;
-        if (dataSize > 0 && dataSize < 200) {
+        if (dataSize > 0 && MULTIPLES*dataSize < Integer.MAX_VALUE) {
             bannerAdapter = new BannerAdapter();
             showBanner();
         } else {
@@ -210,7 +221,7 @@ public class Banner extends RelativeLayout {
 
     private class BannerAdapter extends PagerAdapter implements ViewPager.OnPageChangeListener {
 
-        private final int FAKE_BANNER_SIZE = 200;
+        private int FAKE_BANNER_SIZE = dataSize*MULTIPLES;
         private int DEFAULT_BANNER_SIZE = dataSize;
 
         @Override
@@ -255,7 +266,7 @@ public class Banner extends RelativeLayout {
         public void onPageSelected(int position) {
             position %= DEFAULT_BANNER_SIZE;
             changeIndicator(position);
-            if (onPageChangeListener != null){
+            if (onPageChangeListener != null) {
                 onPageChangeListener.onPageSelected(position);
             }
         }
@@ -274,6 +285,7 @@ public class Banner extends RelativeLayout {
             }
         }
     }
+
     /**
      * 添加ViewPager滚动监听器
      *

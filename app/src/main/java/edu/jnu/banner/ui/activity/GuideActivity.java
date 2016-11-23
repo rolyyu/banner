@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,7 +17,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.jnu.banner.Banner;
 import edu.jnu.banner.Constant;
+import edu.jnu.banner.Entity.GuideBean;
 import edu.jnu.banner.R;
+import edu.jnu.banner.transformer.TransitionEffect;
 
 /**
  * Created by roly on 2016/11/21.
@@ -31,8 +32,10 @@ public class GuideActivity extends Activity {
     Button btnEnter;
     @BindView(R.id.tv_skip)
     TextView tvSkip;
-    private List<Integer> guideBeans;
-    
+    @BindView(R.id.bg_banner)
+    Banner bgBanner;
+    private List<GuideBean> guideBeans;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +50,22 @@ public class GuideActivity extends Activity {
             @Override
             public void fillBannerItem(View view, int position) {
                 ImageView imageView = (ImageView) view.findViewById(R.id.img_banner);
-                imageView.setImageResource(guideBeans.get(position));
+                imageView.setImageResource(guideBeans.get(position).getUpperGuideImg());
             }
         });
+        banner.setPageTransformer(TransitionEffect.Rotate);
+
+        bgBanner.setAdapter(R.layout.item_bg_guide, false, dataSize, new Banner.Adapter() {
+            @Override
+            public void fillBannerItem(View view, int position) {
+                ImageView imageView = (ImageView) view.findViewById(R.id.img_banner);
+                imageView.setImageResource(guideBeans.get(position).getLowerGuideImg());
+                TextView textView = (TextView) view.findViewById(R.id.tv_intro);
+                textView.setText(guideBeans.get(position).getLowerGuideIntro());
+            }
+        });
+        bgBanner.setPageTransformer(TransitionEffect.Cube);
+
         banner.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -66,8 +82,12 @@ public class GuideActivity extends Activity {
     }
 
     private void initData() {
-        for (int guide : Constant.guide) {
-            guideBeans.add(guide);
+        for(int i = 0;i < Constant.upperGuideImg.length;i++){
+            GuideBean guideBean = new GuideBean();
+            guideBean.setUpperGuideImg(Constant.upperGuideImg[i]);
+            guideBean.setLowerGuideImg(Constant.lowerGuideImg[i]);
+            guideBean.setLowerGuideIntro(Constant.lowerGuideIntro[i]);
+            guideBeans.add(guideBean);
         }
     }
 

@@ -2,7 +2,7 @@ package edu.jnu.banner.Entity;
 
 /**
  * Created by roly on 2016/10/31.
- *
+ * 循环广告栏
  */
 public class BannerBean {
 
