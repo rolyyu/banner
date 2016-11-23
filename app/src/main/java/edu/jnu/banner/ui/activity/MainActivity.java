@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         banner.setIsAutoPlay(true);
+        banner.setIndicators(R.drawable.ic_point_normal_1, R.drawable.ic_point_selected_1, 15, 3, 4);
 
     }
 

@@ -1,7 +1,6 @@
 package edu.jnu.banner.ui.transformer;
 
 public enum TransitionEffect {
-    Default,
     Alpha,
     Rotate,
     Cube,

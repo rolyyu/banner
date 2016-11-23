@@ -32,8 +32,6 @@ public abstract class PageTransformer implements ViewPager.PageTransformer {
 
     public static PageTransformer getPageTransformer(TransitionEffect effect) {
         switch (effect) {
-            case Default:
-                return new DefaultPageTransformer();
             case Alpha:
                 return new AlphaPageTransformer();
             case Rotate:

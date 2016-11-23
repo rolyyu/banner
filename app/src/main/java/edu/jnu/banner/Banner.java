@@ -1,6 +1,7 @@
 package edu.jnu.banner;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,7 +21,6 @@ import edu.jnu.banner.ui.transformer.PageTransformer;
 import edu.jnu.banner.ui.transformer.TransitionEffect;
 import edu.jnu.banner.util.ScreenUtil;
 import edu.jnu.banner.ui.widget.BannerViewPager;
-import edu.jnu.banner.ui.widget.Indicator;
 import edu.jnu.banner.ui.widget.TimerHelper;
 
 /**
@@ -39,11 +39,17 @@ public class Banner extends RelativeLayout {
     //指示器
     private LinearLayout llPoint;
     private List<Indicator> indicators;
+    //指示器默认参数
+    private int indicatorNormalRes = R.drawable.ic_point_normal;
+    private int indicatorSelectedRes = R.drawable.ic_point_selected;
+    private int indicatorWidth = 7;
+    private int indicatorHeight = 7;
+    private int indicatorInterval = 4;
 
-    private boolean isAutoPlay = false;
     //自动循环显示时间
-    private long TIME_PERIOD = 5000;
+    private long timePeriod = 5000;
     private TimerHelper timerHelper;
+    private boolean isAutoPlay = false;
     //之前显示的图片
     private int preSelect = -1;
     //当前显示图片
@@ -65,12 +71,6 @@ public class Banner extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         this.context = context;
         initView();
-    }
-
-    public void setPageTransformer(TransitionEffect effect) {
-        if (vpBanner != null) {
-            vpBanner.setPageTransformer(true, PageTransformer.getPageTransformer(effect));
-        }
     }
 
     private void initView() {
@@ -124,9 +124,13 @@ public class Banner extends RelativeLayout {
      * @param period 周期
      */
     public void setAutoPlayTimePeriod(long period) {
-        TIME_PERIOD = period;
+        timePeriod = period;
     }
 
+    /**
+     * 是否自动播放
+     * @param isAutoPlay 默认false
+     */
     public void setIsAutoPlay(boolean isAutoPlay) {
         this.isAutoPlay = isAutoPlay;
     }
@@ -141,7 +145,7 @@ public class Banner extends RelativeLayout {
         super.onWindowVisibilityChanged(visibility);
         if (isAutoPlay) {
             if (visibility == VISIBLE)
-                timerHelper.start(TIME_PERIOD, TIME_PERIOD);
+                timerHelper.start(timePeriod, timePeriod);
             else
                 timerHelper.stop();
         }
@@ -176,6 +180,16 @@ public class Banner extends RelativeLayout {
         }
         if (nowSelect != -1) {
             indicators.get(nowSelect).setFocus(true);
+        }
+    }
+
+    /**
+     * 设置页面切换动画
+     * @param effect
+     */
+    public void setPageTransformer(TransitionEffect effect) {
+        if (vpBanner != null) {
+            vpBanner.setPageTransformer(true, PageTransformer.getPageTransformer(effect));
         }
     }
 
@@ -293,5 +307,76 @@ public class Banner extends RelativeLayout {
      */
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         this.onPageChangeListener = onPageChangeListener;
+    }
+
+    /**
+     * 设置指示器
+     * @param indicatorWidth 指示器宽度
+     * @param indicatorHeight 指示器高度
+     * @param indicatorInterval 指示器间距
+     */
+    public void setIndicators(int indicatorWidth,int indicatorHeight,int indicatorInterval){
+        setIndicators(indicatorNormalRes,indicatorSelectedRes,indicatorWidth,indicatorHeight,indicatorInterval);
+    }
+
+    /**
+     * 设置指示器
+     * @param indicatorNormalRes 未选中状态图标
+     * @param indicatorSelectedRes 选中状态图标
+     */
+    public void setIndicators(@DrawableRes int indicatorNormalRes,@DrawableRes int indicatorSelectedRes){
+        setIndicators(indicatorNormalRes,indicatorSelectedRes,indicatorWidth,indicatorHeight,indicatorInterval);
+    }
+
+    /**
+     * 设置指示器
+     * @param indicatorNormalRes 未选中状态图标
+     * @param indicatorSelectedRes 选中状态图标
+     * @param indicatorWidth 指示器宽度
+     * @param indicatorHeight 指示器高度
+     * @param indicatorInterval 指示器间距
+     */
+    public void setIndicators(@DrawableRes int indicatorNormalRes,@DrawableRes int indicatorSelectedRes,int indicatorWidth,int indicatorHeight,int indicatorInterval){
+        this.indicatorNormalRes = indicatorNormalRes;
+        this.indicatorSelectedRes = indicatorSelectedRes;
+        this.indicatorWidth = indicatorWidth;
+        this.indicatorHeight = indicatorHeight;
+        this.indicatorInterval = indicatorInterval;
+        indicators.clear();
+        llPoint.removeAllViews();
+        for (int i = 0; i < dataSize; i++) {
+            indicators.add(new Indicator(context, llPoint, i == 0));
+        }
+    }
+    /**
+     * 自定义指示器，可以设置长、宽和间距
+     */
+    private class Indicator {
+        private Context context;
+        private View point;
+
+        public Indicator(Context context, LinearLayout parent, boolean isFirst) {
+            this.context = context;
+            point = new View(context);
+            point.setBackgroundDrawable(context.getResources().getDrawable(indicatorNormalRes));
+            parent.addView(point);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) point.getLayoutParams();
+            //设置长宽和间距
+            params.width = ScreenUtil.dipToPx(context, indicatorWidth);
+            params.height = ScreenUtil.dipToPx(context, indicatorHeight);
+            if (!isFirst) {
+                //设置间距
+                params.leftMargin = ScreenUtil.dipToPx(context, indicatorInterval);
+            }
+            point.setLayoutParams(params);
+        }
+
+        public void setFocus(boolean isFocus) {
+            if (isFocus) {
+                point.setBackgroundDrawable(context.getResources().getDrawable(indicatorSelectedRes));
+            } else {
+                point.setBackgroundDrawable(context.getResources().getDrawable(indicatorNormalRes));
+            }
+        }
     }
 }
