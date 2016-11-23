@@ -1,4 +1,4 @@
-package edu.jnu.banner.widget;
+package edu.jnu.banner.ui.widget;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

@@ -32,5 +32,6 @@ dependencies {
     compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
     //picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+    //nineOldAndroids
     compile 'com.nineoldandroids:library:2.4.0'
 }

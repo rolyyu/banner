@@ -16,12 +16,12 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.jnu.banner.transformer.PageTransformer;
-import edu.jnu.banner.transformer.TransitionEffect;
+import edu.jnu.banner.ui.transformer.PageTransformer;
+import edu.jnu.banner.ui.transformer.TransitionEffect;
 import edu.jnu.banner.util.ScreenUtil;
-import edu.jnu.banner.widget.BannerViewPager;
-import edu.jnu.banner.widget.Indicator;
-import edu.jnu.banner.widget.TimerHelper;
+import edu.jnu.banner.ui.widget.BannerViewPager;
+import edu.jnu.banner.ui.widget.Indicator;
+import edu.jnu.banner.ui.widget.TimerHelper;
 
 /**
  * Created by roly on 2016/11/16.

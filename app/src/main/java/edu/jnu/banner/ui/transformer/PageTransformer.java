@@ -1,4 +1,4 @@
-package edu.jnu.banner.transformer;
+package edu.jnu.banner.ui.transformer;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

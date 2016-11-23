@@ -1,4 +1,4 @@
-package edu.jnu.banner.widget;
+package edu.jnu.banner.ui.widget;
 
 import java.util.Timer;
 import java.util.TimerTask;

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <edu.jnu.banner.widget.GuideLayout
+    <edu.jnu.banner.ui.widget.GuideLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,7 +18,7 @@
             android:background="@android:color/transparent"/>
 
 
-    </edu.jnu.banner.widget.GuideLayout>
+    </edu.jnu.banner.ui.widget.GuideLayout>
 
     <TextView
         android:id="@+id/tv_skip"

@@ -19,7 +19,7 @@ import edu.jnu.banner.Banner;
 import edu.jnu.banner.Constant;
 import edu.jnu.banner.Entity.GuideBean;
 import edu.jnu.banner.R;
-import edu.jnu.banner.transformer.TransitionEffect;
+import edu.jnu.banner.ui.transformer.TransitionEffect;
 
 /**
  * Created by roly on 2016/11/21.

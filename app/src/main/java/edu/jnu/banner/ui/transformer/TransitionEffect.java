@@ -1,4 +1,4 @@
-package edu.jnu.banner.transformer;
+package edu.jnu.banner.ui.transformer;
 
 public enum TransitionEffect {
     Default,

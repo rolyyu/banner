@@ -1,4 +1,4 @@
-package edu.jnu.banner.widget;
+package edu.jnu.banner.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
