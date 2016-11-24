@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="edu.jnu.banner.ui.activity.MainActivity">
+    android:layout_height="match_parent">
 
-    <edu.jnu.banner.Banner
+    <com.roly.banner.Banner
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="200dp" />

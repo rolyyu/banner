@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Banner</string>
+    <string name="app_name">BannerDemo</string>
     <string name="btn_enter">Enter</string>
     <string name="btn_skip">Skip ></string>
 </resources>

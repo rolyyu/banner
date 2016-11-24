@@ -3,22 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <edu.jnu.banner.ui.widget.GuideLayout
+    <com.roly.banner.widget.GuideLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <edu.jnu.banner.Banner
+        <com.roly.banner.Banner
             android:id="@+id/bg_banner"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <edu.jnu.banner.Banner
+        <com.roly.banner.Banner
             android:id="@+id/banner"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"/>
+            android:layout_height="match_parent" />
 
 
-    </edu.jnu.banner.ui.widget.GuideLayout>
+    </com.roly.banner.widget.GuideLayout>
 
     <TextView
         android:id="@+id/tv_skip"
