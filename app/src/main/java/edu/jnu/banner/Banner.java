@@ -54,7 +54,6 @@ public class Banner extends RelativeLayout {
     private int preSelect = -1;
     //当前显示图片
     private int nowSelect = 0;
-    private boolean isUserTouched = false;
 
     private int layoutResId;
     private boolean isCyclePlay;
@@ -97,22 +96,19 @@ public class Banner extends RelativeLayout {
         timerHelper = new TimerHelper() {
             @Override
             public void run() {
-                if (!isUserTouched) {
-                    post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (bannerAdapter != null) {
-                                int count = bannerAdapter.getCount();
-                                if (count > 2) {
-                                    int index = vpBanner.getCurrentItem();
-                                    index = index % (count - 2) + 1;
-                                    vpBanner.setCurrentItem(index);
-                                    Log.d("index", index + "");
-                                }
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (bannerAdapter != null) {
+                            int count = bannerAdapter.getCount();
+                            if (count > 2) {
+                                int index = vpBanner.getCurrentItem();
+                                index = index % (count - 2) + 1;
+                                vpBanner.setCurrentItem(index);
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         };
 
@@ -129,6 +125,7 @@ public class Banner extends RelativeLayout {
 
     /**
      * 是否自动播放
+     *
      * @param isAutoPlay 默认false
      */
     public void setIsAutoPlay(boolean isAutoPlay) {
@@ -162,11 +159,69 @@ public class Banner extends RelativeLayout {
         int action = ev.getAction();
         if (action == MotionEvent.ACTION_DOWN
                 || action == MotionEvent.ACTION_MOVE) {
-            isUserTouched = true;
+            timerHelper.stop();
         } else if (action == MotionEvent.ACTION_UP) {
-            isUserTouched = false;
+            timerHelper.start(timePeriod, timePeriod);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * 设置页面切换动画
+     *
+     * @param effect
+     */
+    public void setPageTransformer(TransitionEffect effect) {
+        if (vpBanner != null) {
+            vpBanner.setPageTransformer(true, PageTransformer.getPageTransformer(effect));
+        }
+    }
+
+    public interface Adapter {
+        void fillBannerItem(View view, int position);
+    }
+    /**
+     * 设置自定义布局、数据大小、适配器
+     *
+     * @param layoutResId 自定义布局
+     * @param isCyclePlay 是否循环播放
+     * @param dataSize    数据大小
+     * @param adapter     适配器
+     */
+    public void setAdapter(@LayoutRes int layoutResId, boolean isCyclePlay, int dataSize, Adapter adapter) {
+        this.layoutResId = layoutResId;
+        this.isCyclePlay = isCyclePlay;
+        this.dataSize = dataSize;
+        this.adapter = adapter;
+        if (dataSize > 0 && MULTIPLES * dataSize < Integer.MAX_VALUE) {
+            bannerAdapter = new BannerAdapter();
+            showBanner();
+        } else {
+            throw new IllegalArgumentException("dataSize out of range");
+        }
+    }
+
+    private void showBanner() {
+        if (dataSize == 1) {
+            vpBanner.setScrollable(false);
+        } else {
+            showIndicator();
+            vpBanner.setCurrentItem(nowSelect);
+            vpBanner.addOnPageChangeListener(bannerAdapter);
+        }
+        vpBanner.setAdapter(bannerAdapter);
+    }
+
+    /**
+     * 显示指示器
+     */
+    private void showIndicator() {
+        indicators.clear();
+        llPoint.removeAllViews();
+        for (int i = 0; i < dataSize; i++) {
+            indicators.add(new Indicator(context, llPoint, i == 0));
+        }
+        changeIndicator(nowSelect);
     }
 
     /**
@@ -183,59 +238,9 @@ public class Banner extends RelativeLayout {
         }
     }
 
-    /**
-     * 设置页面切换动画
-     * @param effect
-     */
-    public void setPageTransformer(TransitionEffect effect) {
-        if (vpBanner != null) {
-            vpBanner.setPageTransformer(true, PageTransformer.getPageTransformer(effect));
-        }
-    }
-
-    public interface Adapter {
-        void fillBannerItem(View view, int position);
-    }
-
-    /**
-     * 设置自定义布局、数据大小、适配器
-     *
-     * @param layoutResId 自定义布局
-     * @param isCyclePlay 是否循环播放
-     * @param dataSize    数据大小
-     * @param adapter     适配器
-     */
-    public void setAdapter(@LayoutRes int layoutResId, boolean isCyclePlay, int dataSize, Adapter adapter) {
-        this.layoutResId = layoutResId;
-        this.isCyclePlay = isCyclePlay;
-        this.dataSize = dataSize;
-        this.adapter = adapter;
-        if (dataSize > 0 && MULTIPLES*dataSize < Integer.MAX_VALUE) {
-            bannerAdapter = new BannerAdapter();
-            showBanner();
-        } else {
-            throw new IllegalArgumentException("dataSize out of range");
-        }
-    }
-
-    private void showBanner() {
-        if (dataSize == 1) {
-            vpBanner.setScrollable(false);
-            setIsAutoPlay(false);
-        } else {
-            for (int i = 0; i < dataSize; i++) {
-                indicators.add(new Indicator(context, llPoint, i == 0));
-            }
-            changeIndicator(nowSelect);
-            vpBanner.setCurrentItem(nowSelect);
-            vpBanner.addOnPageChangeListener(bannerAdapter);
-        }
-        vpBanner.setAdapter(bannerAdapter);
-    }
-
     private class BannerAdapter extends PagerAdapter implements ViewPager.OnPageChangeListener {
 
-        private int FAKE_BANNER_SIZE = dataSize*MULTIPLES;
+        private int FAKE_BANNER_SIZE = dataSize * MULTIPLES;
         private int DEFAULT_BANNER_SIZE = dataSize;
 
         @Override
@@ -311,43 +316,43 @@ public class Banner extends RelativeLayout {
 
     /**
      * 设置指示器
-     * @param indicatorWidth 指示器宽度
-     * @param indicatorHeight 指示器高度
+     *
+     * @param indicatorWidth    指示器宽度
+     * @param indicatorHeight   指示器高度
      * @param indicatorInterval 指示器间距
      */
-    public void setIndicators(int indicatorWidth,int indicatorHeight,int indicatorInterval){
-        setIndicators(indicatorNormalRes,indicatorSelectedRes,indicatorWidth,indicatorHeight,indicatorInterval);
+    public void setIndicators(int indicatorWidth, int indicatorHeight, int indicatorInterval) {
+        setIndicators(indicatorNormalRes, indicatorSelectedRes, indicatorWidth, indicatorHeight, indicatorInterval);
     }
 
     /**
      * 设置指示器
-     * @param indicatorNormalRes 未选中状态图标
+     *
+     * @param indicatorNormalRes   未选中状态图标
      * @param indicatorSelectedRes 选中状态图标
      */
-    public void setIndicators(@DrawableRes int indicatorNormalRes,@DrawableRes int indicatorSelectedRes){
-        setIndicators(indicatorNormalRes,indicatorSelectedRes,indicatorWidth,indicatorHeight,indicatorInterval);
+    public void setIndicators(@DrawableRes int indicatorNormalRes, @DrawableRes int indicatorSelectedRes) {
+        setIndicators(indicatorNormalRes, indicatorSelectedRes, indicatorWidth, indicatorHeight, indicatorInterval);
     }
 
     /**
      * 设置指示器
-     * @param indicatorNormalRes 未选中状态图标
+     *
+     * @param indicatorNormalRes   未选中状态图标
      * @param indicatorSelectedRes 选中状态图标
-     * @param indicatorWidth 指示器宽度
-     * @param indicatorHeight 指示器高度
-     * @param indicatorInterval 指示器间距
+     * @param indicatorWidth       指示器宽度
+     * @param indicatorHeight      指示器高度
+     * @param indicatorInterval    指示器间距
      */
-    public void setIndicators(@DrawableRes int indicatorNormalRes,@DrawableRes int indicatorSelectedRes,int indicatorWidth,int indicatorHeight,int indicatorInterval){
+    public void setIndicators(@DrawableRes int indicatorNormalRes, @DrawableRes int indicatorSelectedRes, int indicatorWidth, int indicatorHeight, int indicatorInterval) {
         this.indicatorNormalRes = indicatorNormalRes;
         this.indicatorSelectedRes = indicatorSelectedRes;
         this.indicatorWidth = indicatorWidth;
         this.indicatorHeight = indicatorHeight;
         this.indicatorInterval = indicatorInterval;
-        indicators.clear();
-        llPoint.removeAllViews();
-        for (int i = 0; i < dataSize; i++) {
-            indicators.add(new Indicator(context, llPoint, i == 0));
-        }
+        showIndicator();
     }
+
     /**
      * 自定义指示器，可以设置长、宽和间距
      */
