@@ -96,19 +96,20 @@ public class Banner extends RelativeLayout {
         timerHelper = new TimerHelper() {
             @Override
             public void run() {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bannerAdapter != null) {
-                            int count = bannerAdapter.getCount();
-                            if (count > 2) {
-                                int index = vpBanner.getCurrentItem();
-                                index = index % (count - 2) + 1;
-                                vpBanner.setCurrentItem(index);
+                if (isAutoPlay)
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (bannerAdapter != null) {
+                                int count = bannerAdapter.getCount();
+                                if (count > 2) {
+                                    int index = vpBanner.getCurrentItem();
+                                    index = index % (count - 2) + 1;
+                                    vpBanner.setCurrentItem(index);
+                                }
                             }
                         }
-                    }
-                });
+                    });
             }
         };
 
@@ -140,12 +141,10 @@ public class Banner extends RelativeLayout {
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-        if (isAutoPlay) {
-            if (visibility == VISIBLE)
-                timerHelper.start(timePeriod, timePeriod);
-            else
-                timerHelper.stop();
-        }
+        if (visibility == VISIBLE)
+            timerHelper.start(timePeriod, timePeriod);
+        else
+            timerHelper.stop();
     }
 
     /**
@@ -156,14 +155,12 @@ public class Banner extends RelativeLayout {
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (isAutoPlay) {
-            int action = ev.getAction();
-            if (action == MotionEvent.ACTION_DOWN
-                    || action == MotionEvent.ACTION_MOVE) {
-                timerHelper.stop();
-            } else if (action == MotionEvent.ACTION_UP) {
-                timerHelper.start(timePeriod, timePeriod);
-            }
+        int action = ev.getAction();
+        if (action == MotionEvent.ACTION_DOWN
+                || action == MotionEvent.ACTION_MOVE) {
+            timerHelper.stop();
+        } else if (action == MotionEvent.ACTION_UP) {
+            timerHelper.start(timePeriod, timePeriod);
         }
         return super.dispatchTouchEvent(ev);
     }

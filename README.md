@@ -11,7 +11,7 @@
 ### 1.在布局文件中添加Banner
 
 ```xml
-<edu.jnu.banner.Banner
+<com.roly.banner.Banner
     android:id="@+id/banner"
     android:layout_width="match_parent"
     android:layout_height="200dp" />
