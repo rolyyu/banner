@@ -8,6 +8,10 @@
 
 ## 使用
 
+```groovy
+compile 'com.rolyyu:banner:1.0.0'
+```
+
 ### 1.在布局文件中添加Banner
 
 ```xml
