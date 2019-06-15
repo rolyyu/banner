@@ -5,12 +5,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 /**
  * Created by roly on 2016/11/22.
  * 联动布局
  */
-public class GuideLayout extends FrameLayout {
+public class GuideLayout extends RelativeLayout{
 
     public GuideLayout(Context context) {
         super(context);

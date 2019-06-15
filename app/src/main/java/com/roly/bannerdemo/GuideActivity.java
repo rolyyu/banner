@@ -52,7 +52,7 @@ public class GuideActivity extends Activity {
                 imageView.setImageResource(guideBeans.get(position).getUpperGuideImg());
             }
         });
-        banner.setPageTransformer(TransitionEffect.Rotate);
+        banner.setPageTransformer(TransitionEffect.Depth);
 
         bgBanner.setAdapter(R.layout.item_bg_guide, false, dataSize, new Banner.Adapter() {
             @Override
@@ -63,7 +63,7 @@ public class GuideActivity extends Activity {
                 textView.setText(guideBeans.get(position).getLowerGuideIntro());
             }
         });
-        bgBanner.setPageTransformer(TransitionEffect.Cube);
+//        bgBanner.setPageTransformer(TransitionEffect.Cube);
 
         banner.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
